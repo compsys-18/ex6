@@ -1,0 +1,93 @@
+\documentclass{jarticle}
+\usepackage{amsmath}
+\usepackage{listings}
+\lstset{
+  basicstyle={\ttfamily},
+  frame={tb}
+}
+
+\title{計算機システム演習　第６回レポート}
+\author{17B13541 \and 細木隆豊}
+\date{}
+
+\begin{document}
+\maketitle
+  \section{実行結果}
+  \begin{lstlisting}
+  MUX(0, 0, 0) => (0)
+  MUX(0, 0, 1) => (0)
+  MUX(0, 1, 0) => (0)
+  MUX(0, 1, 1) => (1)
+  MUX(1, 0, 0) => (1)
+  MUX(1, 0, 1) => (0)
+  MUX(1, 1, 0) => (1)
+  MUX(1, 1, 1) => (1)
+  ALU(AND, 0, 0, 0) => (0, 0)
+  ALU(AND, 0, 1, 0) => (0, 0)
+  ALU(AND, 1, 0, 0) => (0, 0)
+  ALU(AND, 1, 1, 0) => (1, 1)
+  ALU(AND, 0, 0, 1) => (0, 0)
+  ALU(AND, 0, 1, 1) => (0, 1)
+  ALU(AND, 1, 0, 1) => (0, 1)
+  ALU(AND, 1, 1, 1) => (1, 1)
+  ALU(OR, 0, 0, 0) => (0, 0)
+  ALU(OR, 0, 1, 0) => (1, 0)
+  ALU(OR, 1, 0, 0) => (1, 0)
+  ALU(OR, 1, 1, 0) => (1, 1)
+  ALU(OR, 0, 0, 1) => (0, 0)
+  ALU(OR, 0, 1, 1) => (1, 1)
+  ALU(OR, 1, 0, 1) => (1, 1)
+  ALU(OR, 1, 1, 1) => (1, 1)
+  ALU(ADD, 0, 0, 0) => (0, 0)
+  ALU(ADD, 0, 1, 0) => (1, 0)
+  ALU(ADD, 1, 0, 0) => (1, 0)
+  ALU(ADD, 1, 1, 0) => (0, 1)
+  ALU(ADD, 0, 0, 1) => (1, 0)
+  ALU(ADD, 0, 1, 1) => (0, 1)
+  ALU(ADD, 1, 0, 1) => (0, 1)
+  ALU(ADD, 1, 1, 1) => (1, 1)
+  a = 100, b = 200
+  ALU32(AND, 64, c8, 0) => (40, 0, 0)
+  ALU32(OR, 64, c8, 0) => (ec, 0, 0)
+  ALU32(ADD, 64, c8, 0) => (12c, 0, 0)
+  ALU32(SUB, 64, c8, 0) => (ffffff9c, 0, 0) a != b
+  ALU32(SLT, 64, c8, 0) => (1, 0, 0)
+  a = 100, b = 100
+  ALU32(AND, 64, 64, 0) => (64, 0, 0)
+  ALU32(OR, 64, 64, 0) => (64, 0, 0)
+  ALU32(ADD, 64, 64, 0) => (c8, 0, 0)
+  ALU32(SUB, 64, 64, 0) => (0, 1, 0) a = b
+  ALU32(SLT, 64, 64, 0) => (0, 1, 0)
+  OVERFLOW(ADD, 40000000 >=0, 40000000 >=0, 0)
+                              => (80000000 <0, 0, 1)
+  OVERFLOW(ADD, 80000001 <0, 80000000 <0, 0)
+                              => (1 >=0, 0, 1)
+  OVERFLOW(SUB, 40000000 >=0, 80000000 <0, 0)
+                              => (c0000000 <0, 0, 1)
+  OVERFLOW(SUB, 80000000 <0, 40000000 >=0, 0)
+                              => (40000000 >=0, 0, 1)
+  \end{lstlisting}
+  \section{課題２}
+  \begin{table}[htb]
+    \begin{tabular}{|c|c|c|c||c|c|c|c|} \hline
+      演算 & a & b & overflowを起こした時の & binvert & a & b & s \\
+       & & & 実行結果s & & (msb) & (msb) & (msb) \\ \hline \hline
+      a $+$ b & $>=$0 & $>=$0 & $<$0 & 0 & 0 & 0 & 1 \\ \hline
+      a $+$ b & $<$0 & $<$0 & $>=$0 & 0 & 1 & 1 & 0 \\ \hline
+      a $-$ b & $>=$0 & $<$0 & $<$0 & 1 & 0 & 1 & 1 \\ \hline
+      a $-$ b & $<$0 & $>=$0 & $>=$0 & 1 & 1 & 0 & 0 \\ \hline
+    \end{tabular}
+  \end{table}
+
+  {\large 積和標準形}
+  \[
+   \overline{\mbox{binvert}} \cdot \overline{\mbox{a}} \cdot \overline{\mbox{b}} \cdot s +
+   \overline{\mbox{binvert}} \cdot a \cdot b \cdot \overline{\mbox{s}} +
+   binvert \cdot \overline{\mbox{a}} \cdot b \cdot s +
+   binvert \cdot a \cdot \overline{\mbox{b}} \cdot \overline{\mbox{s}}
+  \]
+  \section{感想}
+  前回に比べると理解しやすく、option課題まで終わらせました。
+
+  ALU32(SUB)の結果が１ずれていたので間違っている箇所を見つけるためにMUXもtestしました。
+\end{document}
